@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>中文 - Aliyun 计算巢 x Presenton</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#presenton">Presenton社区版计算巢部署文档</a></li>
+              
+                  <li><a href="#_1">服务说明</a></li>
+                  
+              
+                  <li><a href="#_2">计费说明</a></li>
+                  
+              
+                  <li><a href="#ram">RAM账号所需权限</a></li>
+                  
+              
+                  <li><a href="#_3">服务实例部署流程</a></li>
+                  
+                      <li class="li-h3"><a href="#_4">部署步骤</a></li>
+                  
+              
+                  <li><a href="#_5">首次使用配置</a></li>
+                  
+                      <li class="li-h3"><a href="#1">1. 配置大模型</a></li>
+                  
+                      <li class="li-h3"><a href="#2">2. 数据持久化</a></li>
+                  
+              
+                  <li><a href="#_6">参数说明</a></li>
+                  
+              
+                  <li><a href="#_7">输出说明</a></li>
+                  
+              
+                  <li><a href="#_8">安全与使用说明</a></li>
+                  
+              
+                  <li><a href="#_9">常见问题</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="presenton">Presenton社区版计算巢部署文档</h1>
+<h2 id="_1">服务说明</h2>
+<p>Presenton 是一款 Apache 2.0 许可的自托管 AI 演示文稿生成器：输入一句话或上传一份文档，即可自动生成可编辑的幻灯片，内置多套模板与浏览器端编辑器，支持导出 PPTX 与 PDF。本计算巢服务采用单机 ECS 部署，ECS 镜像内已预置 Presenton、Chromium 与 Docker Compose 运行环境，数据全部保存在实例本机。</p>
+<p>该服务带有内置账号体系，访问入口为实例公网 IP 的 5001 端口，登录后可进入 Presenton 控制台。</p>
+<h2 id="_2">计费说明</h2>
+<p>通过此服务模板构建服务不产生费用。用户部署服务实例时，资源费用主要涉及：</p>
+<ul>
+<li>ECS 实例规格（最低 2 vCPU、4 GiB 内存）</li>
+<li>系统盘容量（模板固定 200 GiB ESSD）</li>
+<li>公网带宽（模板固定 5 Mbps）</li>
+</ul>
+<p>计费方式支持按量付费和包年包月，预估费用会在部署前实时展示。</p>
+<h2 id="ram">RAM账号所需权限</h2>
+<p>若使用 RAM 用户创建服务实例，需要在创建服务实例前为该 RAM 用户添加相应权限。</p>
+<table>
+<thead>
+<tr>
+<th>权限策略名称</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AliyunECSFullAccess</td>
+<td>管理云服务器 ECS 的权限</td>
+</tr>
+<tr>
+<td>AliyunVPCFullAccess</td>
+<td>管理专有网络 VPC 的权限</td>
+</tr>
+<tr>
+<td>AliyunROSFullAccess</td>
+<td>管理资源编排 ROS 的权限</td>
+</tr>
+<tr>
+<td>AliyunComputeNestUserFullAccess</td>
+<td>管理计算巢服务用户侧资源的权限</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">服务实例部署流程</h2>
+<h3 id="_4">部署步骤</h3>
+<ol>
+<li>打开计算巢服务实例创建页面，选择部署地域，填写实例规格、实例密码。网络可选择新建 VPC，也可以选择已有机房与交换机。</li>
+</ol>
+<p><a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&amp;ServiceId=service-8c7b9c36bb2f4be1b5c1">部署链接</a></p>
+<p><img alt="创建服务实例" src="create-instance.png" /></p>
+<ol>
+<li>
+<p>确认询价明细后点击 <strong>下一步：确认订单</strong>，同意服务协议并点击 <strong>立即创建</strong>。</p>
+</li>
+<li>
+<p>等待服务实例部署完成。部署完成后，在服务实例详情页的 <strong>输出</strong> 区域查看 <code>presenton_5001_url</code> 访问地址和 <code>AdminPassword</code> 管理员密码。服务详情页信息如下：</p>
+</li>
+</ol>
+<p><img alt="服务详情" src="service-detail.png" /></p>
+<ol>
+<li>用浏览器打开 <code>http://&lt;实例公网IP&gt;:5001</code>，使用用户名 <code>admin</code> 与输出中的管理员密码登录。</li>
+</ol>
+<p><img alt="Presenton 控制台" src="app.png" /></p>
+<h2 id="_5">首次使用配置</h2>
+<h3 id="1">1. 配置大模型</h3>
+<p>Presenton 生成演示文稿依赖外部大模型。模板已预置阿里云百炼 OpenAI 兼容端点（<code>https://dashscope.aliyuncs.com/compatible-mode/v1</code>）与模型 <code>qwen-plus</code>，但未预置任何 API Key。首次使用请进入控制台设置页，在模型配置处填入自己的百炼 API Key 后保存。</p>
+<h3 id="2">2. 数据持久化</h3>
+<p>Presenton 生成的演示文稿、账号与会话配置保存在实例系统盘的 <code>/opt/presenton/app_data</code> 目录，容器重启或重建不会丢失数据；释放服务实例时该目录会随实例一起删除。</p>
+<h2 id="_6">参数说明</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VpcOption</td>
+<td>网络类型，新建 VPC 或使用已有 VPC</td>
+<td>NewVPC</td>
+</tr>
+<tr>
+<td>VpcCidrBlock</td>
+<td>新建 VPC 的网段</td>
+<td>192.168.0.0/16</td>
+</tr>
+<tr>
+<td>VSwitchCidrBlock</td>
+<td>新建交换机的网段</td>
+<td>192.168.1.0/24</td>
+</tr>
+<tr>
+<td>EcsInstanceType</td>
+<td>ECS 实例规格，最低 2 vCPU 4 GiB</td>
+<td>无</td>
+</tr>
+<tr>
+<td>InstancePassword</td>
+<td>实例登录密码</td>
+<td>无</td>
+</tr>
+<tr>
+<td>PayType</td>
+<td>付费类型</td>
+<td>PostPaid</td>
+</tr>
+<tr>
+<td>ZoneId</td>
+<td>可用区</td>
+<td>无</td>
+</tr>
+<tr>
+<td>VpcId / VSwitchId</td>
+<td>已有 VPC 与交换机 ID（选择已有 VPC 时填写）</td>
+<td>空</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_7">输出说明</h2>
+<table>
+<thead>
+<tr>
+<th>输出</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>presenton_5001_url</td>
+<td>Presenton 控制台访问地址</td>
+</tr>
+<tr>
+<td>AdminUsername</td>
+<td>管理员用户名（admin）</td>
+</tr>
+<tr>
+<td>AdminPassword</td>
+<td>系统随机生成的管理员密码</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_8">安全与使用说明</h2>
+<ul>
+<li>出厂关闭 AI 配图与图库配图（<code>DISABLE_IMAGE_GENERATION=true</code>），部署只需要配置一个大模型 Key；如需配图，可在控制台设置页自行配置图片源。</li>
+<li>出厂关闭 Mem0 对话记忆（<code>MEM0_ENABLED=false</code>），该功能依赖宿主机上的 Ollama 服务，云上实例默认不启用。</li>
+<li>出厂关闭 Presenton 官方社区画廊与匿名使用统计，实例不会向境外服务发送数据。</li>
+<li>模板刻意不设置上游的 <code>DISABLE_AUTH</code> 免鉴权开关，除登录接口外所有 API 都需要管理员会话。</li>
+<li>所有数据保存在系统盘 <code>/opt/presenton/app_data</code>，释放服务实例会一并删除，请提前备份需要的演示文稿。</li>
+</ul>
+<h2 id="_9">常见问题</h2>
+<p><strong>登录后无法生成演示文稿？</strong>
+检查设置页中的大模型 API Key 是否已填写、端点与模型名是否正确。</p>
+<p><strong>导出 PPTX 或 PDF 失败？</strong>
+导出依赖镜像内置的 Chromium，大文件导出会短暂占用较多内存，建议使用 4 GiB 以上内存规格。</p>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.1
+  Docs Build Date UTC : 2026-11-05 02:11:51.380627+00:00
+  -->
+</body>
+</html>

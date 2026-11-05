@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>English - Aliyun 计算巢 x Presenton</title>
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="../search/main.js"></script>
+  
+
+  
+
+  <script src="../js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#presenton-community-edition-on-compute-nest">Presenton Community Edition on Compute Nest</a></li>
+              
+                  <li><a href="#overview">Overview</a></li>
+                  
+              
+                  <li><a href="#billing">Billing</a></li>
+                  
+              
+                  <li><a href="#required-ram-permissions">Required RAM permissions</a></li>
+                  
+              
+                  <li><a href="#deployment">Deployment</a></li>
+                  
+              
+                  <li><a href="#first-use">First use</a></li>
+                  
+              
+                  <li><a href="#parameters">Parameters</a></li>
+                  
+              
+                  <li><a href="#outputs">Outputs</a></li>
+                  
+              
+                  <li><a href="#security-notes">Security notes</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="presenton-community-edition-on-compute-nest">Presenton Community Edition on Compute Nest</h1>
+<h2 id="overview">Overview</h2>
+<p>Presenton is a self-hosted, Apache 2.0 licensed AI presentation generator. Give it a sentence or upload a document and it produces editable slides, with built-in templates and a browser editor, exporting to PPTX and PDF. This Compute Nest service deploys a single ECS instance with Presenton, Chromium and Docker Compose preinstalled. All data stays on the instance.</p>
+<p>The service ships with a built-in account system and is reachable at port 5001 of the instance public IP.</p>
+<h2 id="billing">Billing</h2>
+<p>The service template itself is free. Deploying an instance incurs charges for:</p>
+<ul>
+<li>ECS instance (minimum 2 vCPU / 4 GiB)</li>
+<li>200 GiB ESSD system disk (fixed by the template)</li>
+<li>5 Mbps public bandwidth (fixed by the template)</li>
+</ul>
+<p>Both pay-as-you-go and subscription are supported.</p>
+<h2 id="required-ram-permissions">Required RAM permissions</h2>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AliyunECSFullAccess</td>
+<td>Manage ECS resources</td>
+</tr>
+<tr>
+<td>AliyunVPCFullAccess</td>
+<td>Manage VPC resources</td>
+</tr>
+<tr>
+<td>AliyunROSFullAccess</td>
+<td>Manage ROS stacks</td>
+</tr>
+<tr>
+<td>AliyunComputeNestUserFullAccess</td>
+<td>Manage Compute Nest user resources</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deployment">Deployment</h2>
+<ol>
+<li>Open the instance creation page, choose a region, instance type and instance password. Use a new VPC or an existing one.</li>
+</ol>
+<p><a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&amp;ServiceId=service-8c7b9c36bb2f4be1b5c1">Deploy link</a></p>
+<p><img alt="Create instance" src="../create-instance.png" /></p>
+<ol>
+<li>
+<p>Review the price and click <strong>Create</strong>.</p>
+</li>
+<li>
+<p>When the instance is deployed, the <strong>Outputs</strong> section shows <code>presenton_5001_url</code> and <code>AdminPassword</code>.</p>
+</li>
+</ol>
+<p><img alt="Instance details" src="instance-detail.png" /></p>
+<ol>
+<li>Open <code>http://&lt;public-ip&gt;:5001</code> and sign in as <code>admin</code> with the generated password.</li>
+</ol>
+<p><img alt="Presenton console" src="../app.png" /></p>
+<h2 id="first-use">First use</h2>
+<p>Open the settings page and fill in your own DashScope (Bailian) API key. The template already points to the OpenAI compatible endpoint <code>https://dashscope.aliyuncs.com/compatible-mode/v1</code> with model <code>qwen-plus</code>, but no key is bundled.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VpcOption</td>
+<td>NewVPC or ExistingVPC</td>
+<td>NewVPC</td>
+</tr>
+<tr>
+<td>VpcCidrBlock</td>
+<td>CIDR of the new VPC</td>
+<td>192.168.0.0/16</td>
+</tr>
+<tr>
+<td>VSwitchCidrBlock</td>
+<td>CIDR of the new vSwitch</td>
+<td>192.168.1.0/24</td>
+</tr>
+<tr>
+<td>EcsInstanceType</td>
+<td>ECS instance type (2 vCPU / 4 GiB minimum)</td>
+<td>none</td>
+</tr>
+<tr>
+<td>InstancePassword</td>
+<td>ECS login password</td>
+<td>none</td>
+</tr>
+<tr>
+<td>PayType</td>
+<td>PostPaid or PrePaid</td>
+<td>PostPaid</td>
+</tr>
+<tr>
+<td>ZoneId</td>
+<td>Availability zone</td>
+<td>none</td>
+</tr>
+<tr>
+<td>VpcId / VSwitchId</td>
+<td>Existing VPC and vSwitch (ExistingVPC only)</td>
+<td>empty</td>
+</tr>
+</tbody>
+</table>
+<h2 id="outputs">Outputs</h2>
+<table>
+<thead>
+<tr>
+<th>Output</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>presenton_5001_url</td>
+<td>Presenton console URL</td>
+</tr>
+<tr>
+<td>AdminUsername</td>
+<td>Administrator user name (admin)</td>
+</tr>
+<tr>
+<td>AdminPassword</td>
+<td>Randomly generated administrator password</td>
+</tr>
+</tbody>
+</table>
+<h2 id="security-notes">Security notes</h2>
+<ul>
+<li>AI image generation is disabled (<code>DISABLE_IMAGE_GENERATION=true</code>); only one model key is needed.</li>
+<li>Mem0 chat memory is disabled (<code>MEM0_ENABLED=false</code>).</li>
+<li>The Presenton community gallery and anonymous telemetry are disabled.</li>
+<li>The upstream <code>DISABLE_AUTH</code> switch is intentionally not set; every API except login requires an administrator session.</li>
+<li>Data lives in <code>/opt/presenton/app_data</code> on the system disk and is deleted with the instance.</li>
+</ul>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.1
+  Docs Build Date UTC : 2026-11-05 02:11:51.387628+00:00
+  -->
+</body>
+</html>
